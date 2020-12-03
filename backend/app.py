@@ -1,6 +1,6 @@
 import falcon
 
-from resources.pedidos_resource import PedidosResource
+from resources import PedidosResource
 
 # /pedidos (GET, POST)
 # /pedidos/:id (GET, PUT, DELETE)
