@@ -2,6 +2,7 @@ import json
 
 import falcon
 
+from core.clientes.exceptions import ClienteNotFoundException
 from core.clientes.gateway import ClienteGateway
 
 
@@ -10,13 +11,19 @@ class ClientesResource(object):
     def on_get(self, req, resp, cliente_id=None):
         cliente_gateway = ClienteGateway(self.session)
 
-        resp.status = falcon.HTTP_200
         if cliente_id:
-            clientes = cliente_gateway.get_one(int(cliente_id))
-            content = clientes.to_json()
+            try:
+                clientes = cliente_gateway.get_one(int(cliente_id))
+                content = clientes.to_json()
+            except ClienteNotFoundException as exc:
+                resp.status = falcon.HTTP_404
+                resp.body = json.dumps({"erro": str(exc)})
+                return resp
         else:
             clientes = cliente_gateway.get_all()
             content = [cliente.to_json() for cliente in clientes]
+
+        resp.status = falcon.HTTP_200
         resp.body = json.dumps(content)
 
     def on_post(self, req, resp):

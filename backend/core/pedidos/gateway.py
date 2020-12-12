@@ -15,7 +15,7 @@ class PedidoGateway(object):
         pedido = self.session.query(Pedido).filter_by(id=pedido_id).first()
         if pedido:
             return pedido
-        raise PedidoNotFoundException("Pedido #{} não encontrado!".format(pedido_id))
+        raise PedidoNotFoundException("Pedido ID = {} não encontrado!".format(pedido_id))
 
     def create(self, data: datetime, cliente_id: int, valor: float):
         if not data or not cliente_id or not valor:

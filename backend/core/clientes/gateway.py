@@ -13,7 +13,7 @@ class ClienteGateway(object):
         cliente = self.session.query(Cliente).filter_by(id=cliente_id).first()
         if cliente:
             return cliente
-        raise ClienteNotFoundException("Cliente #{} não encontrado!".format(cliente_id))
+        raise ClienteNotFoundException("Cliente ID = {} não encontrado!".format(cliente_id))
 
     def create(self, primeiro_nome: str, ultimo_nome: str, email: str):
         if not primeiro_nome or not ultimo_nome or not email:

@@ -2,6 +2,7 @@ import json
 
 import falcon
 
+from core.pedidos.exceptions import PedidoNotFoundException
 from core.pedidos.gateway import PedidoGateway
 
 
@@ -10,13 +11,19 @@ class PedidosResource(object):
     def on_get(self, req, resp, pedido_id=None):
         pedido_gateway = PedidoGateway(self.session)
 
-        resp.status = falcon.HTTP_200
         if pedido_id:
-            pedidos = pedido_gateway.get_one(int(pedido_id))
-            content = pedidos.to_json()
+            try:
+                pedidos = pedido_gateway.get_one(int(pedido_id))
+                content = pedidos.to_json()
+            except PedidoNotFoundException as exc:
+                resp.status = falcon.HTTP_404
+                resp.body = json.dumps({"erro": str(exc)})
+                return resp
         else:
             pedidos = pedido_gateway.get_all()
             content = [pedido.to_json() for pedido in pedidos]
+
+        resp.status = falcon.HTTP_200
         resp.body = json.dumps(content)
 
     def on_post(self, req, resp):
