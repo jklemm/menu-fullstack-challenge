@@ -2,41 +2,43 @@ import json
 
 import falcon
 
-
-class PedidosStorage(object):
-    def __init__(self, pedidos_dict=None):
-        self.pedidos = pedidos_dict if pedidos_dict else []
-
-    def create(self, pedido_dict):
-        self.pedidos.append(pedido_dict)
-
-    def get_one(self, pedido_id):
-        try:
-            return [p for p in self.pedidos
-                    if p['id'] == int(pedido_id)]
-        except KeyError:
-            raise Exception('Pedido not found!')
-
-    def get_all(self):
-        return self.pedidos
+from core.pedidos.gateway import PedidoGateway
 
 
 class PedidosResource(object):
-    def __init__(self):
-        self.storage = PedidosStorage([
-            {'id': 1, 'cliente_id': 1, 'valor': 120.51},
-            {'id': 2, 'cliente_id': 2, 'valor': 253.48}
-        ])
 
     def on_get(self, req, resp, pedido_id=None):
+        pedido_gateway = PedidoGateway(self.session)
+
         resp.status = falcon.HTTP_200
         if pedido_id:
-            content = self.storage.get_one(int(pedido_id))
+            pedidos = pedido_gateway.get_one(int(pedido_id))
+            content = pedidos.to_json()
         else:
-            content = self.storage.get_all()
+            pedidos = pedido_gateway.get_all()
+            content = [pedido.to_json() for pedido in pedidos]
         resp.body = json.dumps(content)
 
     def on_post(self, req, resp):
+        pedido_gateway = PedidoGateway(self.session)
+
         resp.status = falcon.HTTP_201
         raw_json = json.loads(req.bounded_stream.read().decode())
-        self.storage.create(raw_json)
+        data = raw_json['data']
+        cliente_id = raw_json['cliente_id']
+        valor = raw_json['valor']
+        pedido_gateway.create(data, cliente_id, valor)
+
+    def on_put(self, req, resp, pedido_id=None):
+        pedido_gateway = PedidoGateway(self.session)
+
+        if not pedido_id:
+            resp.status = falcon.HTTP_412
+            return resp
+
+        resp.status = falcon.HTTP_200
+        raw_json = json.loads(req.bounded_stream.read().decode())
+        data = raw_json.get('data', None)
+        cliente_id = raw_json.get('cliente_id', None)
+        valor = raw_json.get('valor', None)
+        pedido_gateway.update(pedido_id, data, cliente_id, valor)
