@@ -44,4 +44,23 @@ class Pedido(Base):
         }
 
 
+class Cliente(Base):
+    __tablename__ = 'clientes'
+    id = Column(Integer, primary_key=True)
+    primeiro_nome = Column(String(100))
+    ultimo_nome = Column(String(100))
+    email = Column(String(255))
+
+    def __repr__(self):
+        return "<Cliente(id={}, first_name='{}', last_name='{}', email={})>".format(self.id, self.primeiro_nome, self.ultimo_nome, self.email)
+
+    def to_json(self):
+        return {
+            'id': self.id,
+            'primeiro_nome': self.primeiro_nome,
+            'ultimo_nome': self.ultimo_nome,
+            'email': self.email,
+        }
+
+
 Base.metadata.create_all(engine)
