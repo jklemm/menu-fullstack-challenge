@@ -33,7 +33,9 @@ class Pedido(Base):
     valor = Column(Float)
 
     def __repr__(self):
-        return "<Pedido(id={}, data='{}', cliente_id={}, valor={})>".format(self.id, self.data, self.cliente_id, self.valor)
+        return "<Pedido(id={}, data='{}', cliente_id={}, valor={})>".format(
+            self.id, self.data, self.cliente_id, self.valor
+        )
 
     def to_json(self):
         return {
@@ -52,7 +54,9 @@ class Cliente(Base):
     email = Column(String(255))
 
     def __repr__(self):
-        return "<Cliente(id={}, first_name='{}', last_name='{}', email={})>".format(self.id, self.primeiro_nome, self.ultimo_nome, self.email)
+        return "<Cliente(id={}, first_name='{}', last_name='{}', email='{}')>".format(
+            self.id, self.primeiro_nome, self.ultimo_nome, self.email
+        )
 
     def to_json(self):
         return {
