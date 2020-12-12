@@ -1,5 +1,7 @@
 import falcon
 
+from database import Session
+from middlewares.sqlalchemy_mysql import SQLAlchemySessionManager
 from resources import PedidosResource
 
 # /pedidos (GET, POST)
@@ -7,7 +9,11 @@ from resources import PedidosResource
 # /clientes (GET, POST)
 # /clientes/:id (GET, PUT, DELETE)
 
-app = falcon.API()
+app = falcon.API(
+    middleware=[
+        SQLAlchemySessionManager(Session),
+    ]
+)
 
 pedidos = PedidosResource()
 
