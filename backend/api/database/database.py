@@ -22,15 +22,20 @@ else:
 session_factory = sessionmaker(bind=engine)
 Session = scoped_session(session_factory)
 
-Base = declarative_base()
+SqlAlchemyModel = declarative_base()
 
 
-class Pedido(Base):
+class Pedido(SqlAlchemyModel):
     __tablename__ = 'pedidos'
     id = Column(Integer, primary_key=True)
     data = Column(DateTime)
     cliente_id = Column(Integer)
     valor = Column(Float)
+
+    def __init__(self, data, cliente_id, valor):
+        self.data = data
+        self.cliente_id = cliente_id
+        self.valor = valor
 
     def __repr__(self):
         return "<Pedido(id={}, data='{}', cliente_id={}, valor={})>".format(
@@ -46,7 +51,7 @@ class Pedido(Base):
         }
 
 
-class Cliente(Base):
+class Cliente(SqlAlchemyModel):
     __tablename__ = 'clientes'
     id = Column(Integer, primary_key=True)
     primeiro_nome = Column(String(100))
@@ -67,4 +72,4 @@ class Cliente(Base):
         }
 
 
-Base.metadata.create_all(engine)
+SqlAlchemyModel.metadata.create_all(engine)
