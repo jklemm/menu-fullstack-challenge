@@ -9,7 +9,7 @@ from core.clientes.gateway import ClienteGateway
 class ClientesResource(object):
 
     def on_get(self, req, resp, cliente_id=None):
-        cliente_gateway = ClienteGateway(self.session)
+        cliente_gateway = ClienteGateway(req.context['db_session'])
 
         if cliente_id:
             try:
@@ -27,7 +27,7 @@ class ClientesResource(object):
         resp.body = json.dumps(content)
 
     def on_post(self, req, resp):
-        cliente_gateway = ClienteGateway(self.session)
+        cliente_gateway = ClienteGateway(req.context['db_session'])
 
         resp.status = falcon.HTTP_201
         raw_json = json.loads(req.bounded_stream.read().decode())
@@ -37,7 +37,7 @@ class ClientesResource(object):
         cliente_gateway.create(primeiro_nome, ultimo_nome, email)
 
     def on_put(self, req, resp, cliente_id=None):
-        cliente_gateway = ClienteGateway(self.session)
+        cliente_gateway = ClienteGateway(req.context['db_session'])
 
         if not cliente_id:
             resp.status = falcon.HTTP_412
