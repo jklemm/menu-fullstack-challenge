@@ -1,9 +1,9 @@
 import falcon
 
-from database import Session
-from middlewares.sqlalchemy_mysql import SQLAlchemySessionManager
-from resources.pedidos_resource import PedidosResource
-from resources.clientes_resource import ClientesResource
+from api.database.database import Session
+from api.middleware.sqlalchemy_mysql import SQLAlchemySessionManager
+from api.resources.pedidos_resource import PedidosResource
+from api.resources.clientes_resource import ClientesResource
 
 app = falcon.API(
     middleware=[

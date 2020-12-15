@@ -2,7 +2,7 @@ import pytest
 
 from core.clientes.exceptions import ClienteNotFoundException, RequiredDataException
 from core.clientes.gateway import ClienteGateway
-from database import Session
+from api.database.database import Session
 
 
 class TestClienteGatewayTestCase(object):

@@ -4,7 +4,7 @@ import pytest
 
 from core.pedidos.exceptions import PedidoNotFoundException, RequiredDataException
 from core.pedidos.gateway import PedidoGateway
-from database import Session
+from api.database.database import Session
 
 
 class TestPedidoGatewayTestCase(object):
