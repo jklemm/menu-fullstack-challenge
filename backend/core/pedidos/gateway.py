@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from core.pedidos.exceptions import PedidoNotFoundException, RequiredDataException
-from api.database.database import Pedido
+from api.database.models import Pedido
 
 
 class PedidoGateway(object):

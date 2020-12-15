@@ -1,6 +1,6 @@
 import falcon
 
-from api.database.database import Session
+from api.database.models import Session
 from api.middleware.sqlalchemy_mysql import SQLAlchemySessionManager
 from api.resources.pedidos_resource import PedidosResource
 from api.resources.clientes_resource import ClientesResource

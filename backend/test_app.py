@@ -8,7 +8,7 @@ import pytest
 from app import app
 from core.clientes.gateway import ClienteGateway
 from core.pedidos.gateway import PedidoGateway
-from api.database.database import Session
+from api.database.models import Session
 
 
 class TestPedidoResourceTestCase(object):

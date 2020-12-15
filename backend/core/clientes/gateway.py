@@ -1,5 +1,5 @@
 from core.clientes.exceptions import ClienteNotFoundException, RequiredDataException
-from api.database.database import Cliente
+from api.database.models import Cliente
 
 
 class ClienteGateway(object):
