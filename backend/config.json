@@ -1,0 +1,13 @@
+{
+  "db": {
+    "connection": "mysql+mysqldb://root:@localhost:3306/menu_db"
+  },
+  "db_test": {
+    "connection": "mysql+mysqldb://root:@localhost:3306/test_menu_db"
+  },
+  "gunicorn": {
+    "bind": "0.0.0.0:8000",
+    "workers": 1,
+    "timeout": 30
+  }
+}
