@@ -1,5 +1,10 @@
+import aumbry
 from waitress import serve
 
-from app import app
+from api.app import APIService
+from api.config import AppConfig
 
-serve(app, listen='*:8000')
+cfg = aumbry.load(aumbry.FILE, AppConfig, {'CONFIG_FILE_PATH': './config.json'})
+api_app = APIService(cfg)
+
+serve(api_app, listen='*:8000')
