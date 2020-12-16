@@ -1,22 +1,27 @@
+import aumbry
 import pytest
 
+from api.config import AppConfig
+from api.database.manager import DBManager
 from core.clientes.exceptions import ClienteNotFoundException, RequiredDataException
 from core.clientes.gateway import ClienteGateway
-from api.database.models import Session
 
 
 class TestClienteGatewayTestCase(object):
     def setup(self):
-        self.cliente_gateway = ClienteGateway(Session)
+        configurations = aumbry.load(aumbry.FILE, AppConfig, {'CONFIG_FILE_PATH': './config.json'})
+        db_manager = DBManager(configurations.db_test.connection)
+        db_manager.setup()
+        self.cliente_gateway = ClienteGateway(db_manager.session)
 
     def teardown(self):
         self.cliente_gateway.delete_all()
 
-    def _cria_um_cliente(self):
+    def _cria_um_cliente(self, primeiro_nome: str = "", ultimo_nome: str = "", email: str = ""):
         return self.cliente_gateway.create(
-            primeiro_nome="João",
-            ultimo_nome="Ninguém",
-            email="joao.ninguem@gmail.com"
+            primeiro_nome=primeiro_nome or "João",
+            ultimo_nome=ultimo_nome or "Ninguém",
+            email=email or "joao.ninguem@gmail.com"
         )
 
 
@@ -41,9 +46,9 @@ class TestClienteGatewayGetAll(TestClienteGatewayTestCase):
         assert clientes[0].email == email
 
     def test_retorna_tres_clientes(self):
-        self._cria_um_cliente()
-        self._cria_um_cliente()
-        self._cria_um_cliente()
+        self._cria_um_cliente("João", "Ninguém", "joao.ninguem@gmail.com")
+        self._cria_um_cliente("Joaquim", "Amaranto", "joaquim.amaranto@gmail.com")
+        self._cria_um_cliente("Juca", "Pots", "juca.pots@gmail.com")
 
         clientes = self.cliente_gateway.get_all()
 
@@ -129,9 +134,9 @@ class TestClienteGatewayDelete(TestClienteGatewayTestCase):
 
 class TestClienteGatewayDeleteAll(TestClienteGatewayTestCase):
     def test_remove_clientes_com_sucesso(self):
-        self._cria_um_cliente()
-        self._cria_um_cliente()
-        self._cria_um_cliente()
+        self._cria_um_cliente("João", "Ninguém", "joao.ninguem@gmail.com")
+        self._cria_um_cliente("Joaquim", "Amaranto", "joaquim.amaranto@gmail.com")
+        self._cria_um_cliente("Juca", "Pots", "juca.pots@gmail.com")
 
         self.cliente_gateway.delete_all()
 

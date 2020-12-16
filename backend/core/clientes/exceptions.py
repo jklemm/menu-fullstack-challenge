@@ -5,3 +5,7 @@ class ClienteNotFoundException(Exception):
 
 class RequiredDataException(Exception):
     pass
+
+
+class DuplicatedEntityException(Exception):
+    pass

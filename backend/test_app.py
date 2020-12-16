@@ -1,45 +1,49 @@
 import json
 from datetime import datetime
 
+import aumbry
 import falcon
 from falcon import testing
 import pytest
 
-from app import app
+from api.app import APIService
+from api.config import AppConfig
 from core.clientes.gateway import ClienteGateway
 from core.pedidos.gateway import PedidoGateway
-from api.database.models import Session
+
+configurations = aumbry.load(aumbry.FILE, AppConfig, {'CONFIG_FILE_PATH': './config.json'})
+menu_service = APIService(configurations)
 
 
 class TestPedidoResourceTestCase(object):
-
     def setup(self):
+        self.session = menu_service.db_manager.session
         self.headers = {"Content-Type": "application/json"}
+
+    def teardown(self):
+        ClienteGateway(self.session).delete_all()
+        PedidoGateway(self.session).delete_all()
 
     @pytest.fixture(scope="class")
     def client(self):
-        return testing.TestClient(app)
-
-    def teardown(self):
-        ClienteGateway(Session).delete_all()
-        PedidoGateway(Session).delete_all()
+        return testing.TestClient(menu_service)
 
     def _gera_um_cliente(self, primeiro_nome, ultimo_nome, email):
-        return ClienteGateway(Session).create(
+        return ClienteGateway(self.session).create(
             primeiro_nome=primeiro_nome,
             ultimo_nome=ultimo_nome,
             email=email
         )
 
     def _gera_um_pedido(self, data, cliente_id, valor):
-        return PedidoGateway(Session).create(
+        return PedidoGateway(self.session).create(
             data=data,
             cliente_id=cliente_id,
             valor=valor
         )
 
     def _busca_um_pedido(self, pedido_id):
-        return PedidoGateway(Session).get_one(pedido_id)
+        return PedidoGateway(self.session).get_one(pedido_id)
 
 
 class TestPedidoResourceGetAll(TestPedidoResourceTestCase):
@@ -115,7 +119,6 @@ class TestPedidoResourceGetAll(TestPedidoResourceTestCase):
 
 
 class TestPedidoResourceGetOne(TestPedidoResourceTestCase):
-
     def test_retorna_erro_quando_nao_existe_pedido_informado(self, client):
         resposta_esperada = {'erro': 'Pedido ID = 1618613 não encontrado!'}
 
@@ -144,7 +147,7 @@ class TestPedidoResourceGetOne(TestPedidoResourceTestCase):
         assert json_retornado == resposta_esperada
 
 
-class TestPedidoGatewayCreate(TestPedidoResourceTestCase):
+class TestPedidoResourceCreate(TestPedidoResourceTestCase):
     def test_retorna_erro_quando_nao_informa_dados_do_pedido(self, client):
         response = client.simulate_post('/pedidos', body="", headers=self.headers)
 
@@ -164,7 +167,7 @@ class TestPedidoGatewayCreate(TestPedidoResourceTestCase):
         assert response.status == falcon.HTTP_CREATED
 
 
-class TestPedidoGatewayUpdate(TestPedidoResourceTestCase):
+class TestPedidoResourceUpdate(TestPedidoResourceTestCase):
     def test_retorna_erro_quando_nao_envia_id_na_url(self, client):
         response = client.simulate_put('/pedidos/', body="", headers=self.headers)
 
@@ -205,8 +208,7 @@ class TestPedidoGatewayUpdate(TestPedidoResourceTestCase):
                                        headers=self.headers)
         assert response.status == falcon.HTTP_OK
 
-        response = client.simulate_get('/pedidos/{}'.format(pedido.id), headers=self.headers)
-        pedido_retornado = json.loads(response.content.decode())
+        pedido_retornado = self._busca_um_pedido(pedido.id)
         assert pedido_retornado.cliente_id == cliente_alterado.id
-        assert pedido_retornado.data == data_alterada
+        assert pedido_retornado.data.strftime("%Y-%m-%d %H:%M:%S") == data_alterada
         assert pedido_retornado.valor == valor_alterado

@@ -38,6 +38,7 @@ class PedidoGateway(object):
         if valor and valor != pedido.valor:
             pedido.valor = valor
 
+        self.session.add(pedido)
         self.session.commit()
         return pedido
 
