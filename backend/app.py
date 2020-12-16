@@ -7,7 +7,6 @@ from api.resources.clientes_resource import ClientesResource
 
 app = falcon.API(
     middleware=[
-        SQLAlchemySessionManager(Session),
     ]
 )
 
