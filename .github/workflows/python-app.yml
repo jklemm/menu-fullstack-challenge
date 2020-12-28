@@ -10,6 +10,16 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    services:
+      mariadb:
+        image: mariadb:latest
+        ports:
+          - 3306
+        env:
+          MYSQL_USER: user
+          MYSQL_PASSWORD: s3nh4
+          MYSQL_DATABASE: test
+          MYSQL_ROOT_PASSWORD: s3nh4
 
     steps:
     - uses: actions/checkout@v2
@@ -35,4 +45,4 @@ jobs:
         cd backend
         pytest
       env:
-        ENV: TEST
+        ENV: CI

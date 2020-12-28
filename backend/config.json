@@ -5,6 +5,9 @@
   "db_test": {
     "connection": "mysql+mysqldb://root:@localhost:3306/test_menu_db"
   },
+  "db_ci_test": {
+    "connection": "mysql+mysqldb://user:s3nh4@127.0.0.1:3306/test"
+  },
   "gunicorn": {
     "bind": "0.0.0.0:8000",
     "workers": 1,

@@ -17,6 +17,8 @@ class APIService(falcon.API):
         self.db_manager = DBManager(self.cfg.db.connection)
         if os.environ["ENV"] == "TEST":
             self.db_manager = DBManager(self.cfg.db_test.connection)
+        elif os.environ["ENV"] == "CI":
+            self.db_manager = DBManager(self.cfg.db_ci_test.connection)
         self.db_manager.setup()
 
         pedidos_resource = PedidosResource(self.db_manager)

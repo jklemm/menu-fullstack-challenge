@@ -13,10 +13,12 @@ class AppConfig(JsonConfig):
     __mapping__ = {
         "db": Attr("db", DatabaseConfig),
         "db_test": Attr("db_test", DatabaseConfig),
+        "db_ci_test": Attr("db_ci_test", DatabaseConfig),
         "gunicorn": Attr("gunicorn", dict),
     }
 
     def __init__(self):
         self.db = DatabaseConfig()
         self.db_test = DatabaseConfig()
+        self.db_ci_test = DatabaseConfig()
         self.gunicorn = {}
