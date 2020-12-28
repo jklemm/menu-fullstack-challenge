@@ -17,7 +17,9 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
+    "bootstrap": "^4.5.3",
     "sirv-cli": "^1.0.0",
-    "svelte-router-spa": "^5.8.3"
+    "svelte-router-spa": "^5.8.3",
+    "sveltestrap": "^3.9.7"
   }
 }
