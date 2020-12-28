@@ -1,6 +1,10 @@
 from sqlalchemy.exc import IntegrityError
 
-from core.clientes.exceptions import ClienteNotFoundException, RequiredDataException, DuplicatedEntityException
+from core.clientes.exceptions import (
+    ClienteNotFoundException,
+    RequiredDataException,
+    DuplicatedEntityException,
+)
 from api.database.models import Cliente
 
 
@@ -29,7 +33,13 @@ class ClienteGateway(object):
             raise DuplicatedEntityException("Cliente com e-mail '{}' já está cadastrado.".format(email))
         return cliente
 
-    def update(self, cliente_id: int, primeiro_nome: str = None, ultimo_nome: str = None, email: str = None):
+    def update(
+        self,
+        cliente_id: int,
+        primeiro_nome: str = None,
+        ultimo_nome: str = None,
+        email: str = None,
+    ):
         cliente = self.get_one(cliente_id)
 
         if primeiro_nome and primeiro_nome != cliente.primeiro_nome:

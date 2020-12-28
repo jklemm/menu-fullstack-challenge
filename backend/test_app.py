@@ -11,7 +11,7 @@ from api.config import AppConfig
 from core.clientes.gateway import ClienteGateway
 from core.pedidos.gateway import PedidoGateway
 
-configurations = aumbry.load(aumbry.FILE, AppConfig, {'CONFIG_FILE_PATH': './config.json'})
+configurations = aumbry.load(aumbry.FILE, AppConfig, {"CONFIG_FILE_PATH": "./config.json"})
 menu_service = APIService(configurations)
 
 
@@ -29,29 +29,20 @@ class TestPedidoResourceTestCase(object):
         return testing.TestClient(menu_service)
 
     def _gera_um_cliente(self, primeiro_nome, ultimo_nome, email):
-        return ClienteGateway(self.session).create(
-            primeiro_nome=primeiro_nome,
-            ultimo_nome=ultimo_nome,
-            email=email
-        )
+        return ClienteGateway(self.session).create(primeiro_nome=primeiro_nome, ultimo_nome=ultimo_nome, email=email)
 
     def _gera_um_pedido(self, data, cliente_id, valor):
-        return PedidoGateway(self.session).create(
-            data=data,
-            cliente_id=cliente_id,
-            valor=valor
-        )
+        return PedidoGateway(self.session).create(data=data, cliente_id=cliente_id, valor=valor)
 
     def _busca_um_pedido(self, pedido_id):
         return PedidoGateway(self.session).get_one(pedido_id)
 
 
 class TestPedidoResourceGetAll(TestPedidoResourceTestCase):
-
     def test_retorna_vazio_quando_nao_ha_pedidos_cadastrados(self, client):
         resposta_esperada = []
 
-        response = client.simulate_get('/pedidos', headers=self.headers)
+        response = client.simulate_get("/pedidos", headers=self.headers)
 
         json_retornado = json.loads(response.content.decode())
         assert response.status == falcon.HTTP_OK
@@ -67,11 +58,11 @@ class TestPedidoResourceGetAll(TestPedidoResourceTestCase):
                 "id": pedido.id,
                 "cliente_id": cliente.id,
                 "valor": valor,
-                "data": data.isoformat()
+                "data": data.isoformat(),
             }
         ]
 
-        response = client.simulate_get('/pedidos', headers=self.headers)
+        response = client.simulate_get("/pedidos", headers=self.headers)
 
         json_retornado = json.loads(response.content.decode())
         assert response.status == falcon.HTTP_OK
@@ -95,23 +86,23 @@ class TestPedidoResourceGetAll(TestPedidoResourceTestCase):
                 "id": pedido_1.id,
                 "cliente_id": cliente_1.id,
                 "valor": valor_1,
-                "data": data_1.isoformat()
+                "data": data_1.isoformat(),
             },
             {
                 "id": pedido_2.id,
                 "cliente_id": cliente_2.id,
                 "valor": valor_2,
-                "data": data_2.isoformat()
+                "data": data_2.isoformat(),
             },
             {
                 "id": pedido_3.id,
                 "cliente_id": cliente_3.id,
                 "valor": valor_3,
-                "data": data_3.isoformat()
+                "data": data_3.isoformat(),
             },
         ]
 
-        response = client.simulate_get('/pedidos', headers=self.headers)
+        response = client.simulate_get("/pedidos", headers=self.headers)
 
         json_retornado = json.loads(response.content.decode())
         assert response.status == falcon.HTTP_OK
@@ -120,9 +111,9 @@ class TestPedidoResourceGetAll(TestPedidoResourceTestCase):
 
 class TestPedidoResourceGetOne(TestPedidoResourceTestCase):
     def test_retorna_erro_quando_nao_existe_pedido_informado(self, client):
-        resposta_esperada = {'erro': 'Pedido ID = 1618613 não encontrado!'}
+        resposta_esperada = {"erro": "Pedido ID = 1618613 não encontrado!"}
 
-        response = client.simulate_get('/pedidos/1618613', headers=self.headers)
+        response = client.simulate_get("/pedidos/1618613", headers=self.headers)
 
         json_retornado = json.loads(response.content.decode())
         assert response.status == falcon.HTTP_NOT_FOUND
@@ -137,10 +128,10 @@ class TestPedidoResourceGetOne(TestPedidoResourceTestCase):
             "id": pedido.id,
             "cliente_id": cliente.id,
             "valor": valor,
-            "data": data.isoformat()
+            "data": data.isoformat(),
         }
 
-        response = client.simulate_get('/pedidos/{}'.format(pedido.id), headers=self.headers)
+        response = client.simulate_get("/pedidos/{}".format(pedido.id), headers=self.headers)
 
         json_retornado = json.loads(response.content.decode())
         assert response.status == falcon.HTTP_OK
@@ -149,27 +140,23 @@ class TestPedidoResourceGetOne(TestPedidoResourceTestCase):
 
 class TestPedidoResourceCreate(TestPedidoResourceTestCase):
     def test_retorna_erro_quando_nao_informa_dados_do_pedido(self, client):
-        response = client.simulate_post('/pedidos', body="", headers=self.headers)
+        response = client.simulate_post("/pedidos", body="", headers=self.headers)
 
         json_retornado = json.loads(response.content.decode())
         assert response.status == falcon.HTTP_PRECONDITION_FAILED
         assert json_retornado == {"erro": "POST precisa conter um body."}
 
     def test_gera_pedido_quando_informa_dados_corretos(self, client):
-        pedido = {
-            "data": "2020-12-15 07:30:00",
-            "cliente_id": "1",
-            "valor": 101.23
-        }
+        pedido = {"data": "2020-12-15 07:30:00", "cliente_id": "1", "valor": 101.23}
 
-        response = client.simulate_post('/pedidos', body=json.dumps(pedido), headers=self.headers)
+        response = client.simulate_post("/pedidos", body=json.dumps(pedido), headers=self.headers)
 
         assert response.status == falcon.HTTP_CREATED
 
 
 class TestPedidoResourceUpdate(TestPedidoResourceTestCase):
     def test_retorna_erro_quando_nao_envia_id_na_url(self, client):
-        response = client.simulate_put('/pedidos/', body="", headers=self.headers)
+        response = client.simulate_put("/pedidos/", body="", headers=self.headers)
 
         json_retornado = json.loads(response.content.decode())
         assert response.status == falcon.HTTP_PRECONDITION_FAILED
@@ -177,13 +164,13 @@ class TestPedidoResourceUpdate(TestPedidoResourceTestCase):
 
     def test_retorna_erro_quando_pedido_nao_existe(self, client):
         pedido_id_inexistente = 13254864
-        pedido = {
-            "data": "2020-12-15 07:30:00",
-            "cliente_id": "1",
-            "valor": 101.23
-        }
+        pedido = {"data": "2020-12-15 07:30:00", "cliente_id": "1", "valor": 101.23}
 
-        response = client.simulate_put('/pedidos/{}'.format(pedido_id_inexistente), body=json.dumps(pedido), headers=self.headers)
+        response = client.simulate_put(
+            "/pedidos/{}".format(pedido_id_inexistente),
+            body=json.dumps(pedido),
+            headers=self.headers,
+        )
 
         json_retornado = json.loads(response.content.decode())
         assert response.status == falcon.HTTP_NOT_FOUND
@@ -201,11 +188,14 @@ class TestPedidoResourceUpdate(TestPedidoResourceTestCase):
         pedido_alterado = {
             "data": data_alterada,
             "cliente_id": cliente_alterado.id,
-            "valor": valor_alterado
+            "valor": valor_alterado,
         }
 
-        response = client.simulate_put('/pedidos/{}'.format(pedido.id), body=json.dumps(pedido_alterado),
-                                       headers=self.headers)
+        response = client.simulate_put(
+            "/pedidos/{}".format(pedido.id),
+            body=json.dumps(pedido_alterado),
+            headers=self.headers,
+        )
         assert response.status == falcon.HTTP_OK
 
         pedido_retornado = self._busca_um_pedido(pedido.id)

@@ -5,7 +5,7 @@ SqlAlchemyModel = declarative_base()
 
 
 class Pedido(SqlAlchemyModel):
-    __tablename__ = 'pedidos'
+    __tablename__ = "pedidos"
     id = Column(Integer, primary_key=True)
     data = Column(DateTime)
     cliente_id = Column(Integer)
@@ -17,22 +17,20 @@ class Pedido(SqlAlchemyModel):
         self.valor = valor
 
     def __repr__(self):
-        return "<Pedido(id={}, data='{}', cliente_id={}, valor={})>".format(
-            self.id, self.data, self.cliente_id, self.valor
-        )
+        return "<Pedido(id={}, data='{}', cliente_id={}, valor={})>".format(self.id, self.data, self.cliente_id, self.valor)
 
     @property
     def as_dict(self):
         return {
-            'id': self.id,
-            'data': str(self.data.isoformat()),
-            'cliente_id': self.cliente_id,
-            'valor': self.valor,
+            "id": self.id,
+            "data": str(self.data.isoformat()),
+            "cliente_id": self.cliente_id,
+            "valor": self.valor,
         }
 
 
 class Cliente(SqlAlchemyModel):
-    __tablename__ = 'clientes'
+    __tablename__ = "clientes"
     id = Column(Integer, primary_key=True)
     primeiro_nome = Column(String(100))
     ultimo_nome = Column(String(100))
@@ -46,8 +44,8 @@ class Cliente(SqlAlchemyModel):
     @property
     def as_dict(self):
         return {
-            'id': self.id,
-            'primeiro_nome': self.primeiro_nome,
-            'ultimo_nome': self.ultimo_nome,
-            'email': self.email,
+            "id": self.id,
+            "primeiro_nome": self.primeiro_nome,
+            "ultimo_nome": self.ultimo_nome,
+            "email": self.email,
         }

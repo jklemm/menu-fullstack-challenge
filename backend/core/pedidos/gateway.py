@@ -26,7 +26,13 @@ class PedidoGateway(object):
         self.session.commit()
         return pedido
 
-    def update(self, pedido_id: int, data: datetime = None, cliente_id: int = None, valor: float = None):
+    def update(
+        self,
+        pedido_id: int,
+        data: datetime = None,
+        cliente_id: int = None,
+        valor: float = None,
+    ):
         pedido = self.get_one(pedido_id)
 
         if data and data != pedido.data:

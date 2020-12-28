@@ -1,4 +1,3 @@
-
 class PedidoNotFoundException(Exception):
     pass
 

@@ -11,7 +11,7 @@ from core.pedidos.gateway import PedidoGateway
 
 class TestPedidoGatewayTestCase(object):
     def setup(self):
-        configurations = aumbry.load(aumbry.FILE, AppConfig, {'CONFIG_FILE_PATH': './config.json'})
+        configurations = aumbry.load(aumbry.FILE, AppConfig, {"CONFIG_FILE_PATH": "./config.json"})
         db_manager = DBManager(configurations.db_test.connection)
         db_manager.setup()
         self.pedido_gateway = PedidoGateway(db_manager.session)
@@ -20,11 +20,7 @@ class TestPedidoGatewayTestCase(object):
         self.pedido_gateway.delete_all()
 
     def _cria_um_pedido(self):
-        return self.pedido_gateway.create(
-            data=datetime.now(),
-            cliente_id=1,
-            valor=1.0
-        )
+        return self.pedido_gateway.create(data=datetime.now(), cliente_id=1, valor=1.0)
 
 
 class TestPedidoGatewayGetAll(TestPedidoGatewayTestCase):

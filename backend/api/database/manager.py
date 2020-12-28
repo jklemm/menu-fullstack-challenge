@@ -10,9 +10,7 @@ class DBManager(object):
         self.connection = connection
 
         self.engine = sqlalchemy.create_engine(self.connection)
-        self.DBSession = scoping.scoped_session(
-            orm.sessionmaker(bind=self.engine, autocommit=False)
-        )
+        self.DBSession = scoping.scoped_session(orm.sessionmaker(bind=self.engine, autocommit=False))
 
     @property
     def session(self):
@@ -22,4 +20,4 @@ class DBManager(object):
         try:
             models.SqlAlchemyModel.metadata.create_all(self.engine)
         except Exception as e:
-            print('Não foi possivel gerar o Banco de Dados: {}'.format(e))
+            print("Não foi possivel gerar o Banco de Dados: {}".format(e))

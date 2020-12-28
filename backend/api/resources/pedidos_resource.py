@@ -36,9 +36,9 @@ class PedidosResource(BaseResource):
             return resp
 
         raw_json = json.loads(body)
-        data = raw_json['data']
-        cliente_id = raw_json['cliente_id']
-        valor = raw_json['valor']
+        data = raw_json["data"]
+        cliente_id = raw_json["cliente_id"]
+        valor = raw_json["valor"]
         pedido_gateway.create(data, cliente_id, valor)
         resp.status = falcon.HTTP_201
 
@@ -52,9 +52,9 @@ class PedidosResource(BaseResource):
 
         resp.status = falcon.HTTP_200
         raw_json = json.loads(req.bounded_stream.read().decode())
-        data = raw_json.get('data', None)
-        cliente_id = raw_json.get('cliente_id', None)
-        valor = raw_json.get('valor', None)
+        data = raw_json.get("data", None)
+        cliente_id = raw_json.get("cliente_id", None)
+        valor = raw_json.get("valor", None)
         try:
             pedido_gateway.update(pedido_id, data, cliente_id, valor)
         except PedidoNotFoundException as exc:

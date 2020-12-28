@@ -17,9 +17,10 @@ class CustomWorker(SyncWorker):
 
 
 class GunicornApp(BaseApplication):
-    """ Custom Gunicorn application
+    """Custom Gunicorn application
     This allows for us to load gunicorn settings from an external source
     """
+
     def __init__(self, app, options=None):
         self.options = options or {}
         self.application = app
@@ -29,14 +30,14 @@ class GunicornApp(BaseApplication):
         for key, value in self.options.items():
             self.cfg.set(key.lower(), value)
 
-        self.cfg.set('worker_class', 'example.__main__.CustomWorker')
+        self.cfg.set("worker_class", "example.__main__.CustomWorker")
 
     def load(self):
         return self.application
 
 
 def main():
-    cfg = aumbry.load(aumbry.FILE, AppConfig, {'CONFIG_FILE_PATH': './config.json'})
+    cfg = aumbry.load(aumbry.FILE, AppConfig, {"CONFIG_FILE_PATH": "./config.json"})
 
     api_app = APIService(cfg)
     gunicorn_app = GunicornApp(api_app, cfg.gunicorn)

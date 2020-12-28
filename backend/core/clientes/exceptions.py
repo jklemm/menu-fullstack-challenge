@@ -1,4 +1,3 @@
-
 class ClienteNotFoundException(Exception):
     pass
 

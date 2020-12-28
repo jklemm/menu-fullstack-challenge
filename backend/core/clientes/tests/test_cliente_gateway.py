@@ -9,7 +9,7 @@ from core.clientes.gateway import ClienteGateway
 
 class TestClienteGatewayTestCase(object):
     def setup(self):
-        configurations = aumbry.load(aumbry.FILE, AppConfig, {'CONFIG_FILE_PATH': './config.json'})
+        configurations = aumbry.load(aumbry.FILE, AppConfig, {"CONFIG_FILE_PATH": "./config.json"})
         db_manager = DBManager(configurations.db_test.connection)
         db_manager.setup()
         self.cliente_gateway = ClienteGateway(db_manager.session)
@@ -21,7 +21,7 @@ class TestClienteGatewayTestCase(object):
         return self.cliente_gateway.create(
             primeiro_nome=primeiro_nome or "João",
             ultimo_nome=ultimo_nome or "Ninguém",
-            email=email or "joao.ninguem@gmail.com"
+            email=email or "joao.ninguem@gmail.com",
         )
 
 
