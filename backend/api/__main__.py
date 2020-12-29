@@ -3,7 +3,7 @@ from gunicorn.app.base import BaseApplication
 from gunicorn.workers.sync import SyncWorker
 
 from api.app import APIService
-from api.config import AppConfig
+from api.config import load_config_file
 
 
 class CustomWorker(SyncWorker):
@@ -37,7 +37,7 @@ class GunicornApp(BaseApplication):
 
 
 def main():
-    cfg = aumbry.load(aumbry.FILE, AppConfig, {"CONFIG_FILE_PATH": "./config.json"})
+    cfg = load_config_file()
 
     api_app = APIService(cfg)
     gunicorn_app = GunicornApp(api_app, cfg.gunicorn)

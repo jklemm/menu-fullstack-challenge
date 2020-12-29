@@ -1,12 +1,12 @@
 {
   "db": {
-    "connection": "mysql+mysqldb://root:@localhost:3306/menu_db"
+    "connection": "mysql+mysqldb://root:@127.0.0.1:3306/menu_db"
   },
   "db_test": {
-    "connection": "mysql+mysqldb://root:@localhost:3306/test_menu_db"
+    "connection": "mysql+mysqldb://root:@127.0.0.1:3306/test_menu_db"
   },
   "db_ci_test": {
-    "connection": "mysql+mysqldb://user:s3nh4@127.0.0.1:3306/test"
+    "connection": "mysql+mysqldb://user:s3nh4@127.0.0.1:3306/test_menu_db"
   },
   "gunicorn": {
     "bind": "0.0.0.0:8000",

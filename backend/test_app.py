@@ -7,12 +7,11 @@ from falcon import testing
 import pytest
 
 from api.app import APIService
-from api.config import AppConfig
+from api.config import load_config_file
 from core.clientes.gateway import ClienteGateway
 from core.pedidos.gateway import PedidoGateway
 
-configurations = aumbry.load(aumbry.FILE, AppConfig, {"CONFIG_FILE_PATH": "./config.json"})
-menu_service = APIService(configurations)
+menu_service = APIService(load_config_file())
 
 
 class TestPedidoResourceTestCase(object):

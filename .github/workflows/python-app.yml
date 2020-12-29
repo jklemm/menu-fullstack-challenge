@@ -18,8 +18,7 @@ jobs:
         env:
           MYSQL_USER: user
           MYSQL_PASSWORD: s3nh4
-          MYSQL_DATABASE: test
-          MYSQL_ROOT_PASSWORD: s3nh4
+          MYSQL_DATABASE: test_menu_db
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
 
     steps:

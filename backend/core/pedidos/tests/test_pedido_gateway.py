@@ -1,9 +1,8 @@
 from datetime import datetime
 
-import aumbry
 import pytest
 
-from api.config import AppConfig
+from api.config import load_config_file
 from api.database.manager import DBManager
 from core.pedidos.exceptions import PedidoNotFoundException, RequiredDataException
 from core.pedidos.gateway import PedidoGateway
@@ -11,7 +10,7 @@ from core.pedidos.gateway import PedidoGateway
 
 class TestPedidoGatewayTestCase(object):
     def setup(self):
-        configurations = aumbry.load(aumbry.FILE, AppConfig, {"CONFIG_FILE_PATH": "./config.json"})
+        configurations = load_config_file()
         db_manager = DBManager(configurations.db_test.connection)
         db_manager.setup()
         self.pedido_gateway = PedidoGateway(db_manager.session)

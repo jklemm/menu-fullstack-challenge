@@ -1,7 +1,6 @@
-import aumbry
 import pytest
 
-from api.config import AppConfig
+from api.config import load_config_file
 from api.database.manager import DBManager
 from core.clientes.exceptions import ClienteNotFoundException, RequiredDataException
 from core.clientes.gateway import ClienteGateway
@@ -9,7 +8,7 @@ from core.clientes.gateway import ClienteGateway
 
 class TestClienteGatewayTestCase(object):
     def setup(self):
-        configurations = aumbry.load(aumbry.FILE, AppConfig, {"CONFIG_FILE_PATH": "./config.json"})
+        configurations = load_config_file()
         db_manager = DBManager(configurations.db_test.connection)
         db_manager.setup()
         self.cliente_gateway = ClienteGateway(db_manager.session)

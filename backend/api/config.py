@@ -1,3 +1,4 @@
+import aumbry
 from aumbry import Attr, JsonConfig
 
 
@@ -22,3 +23,7 @@ class AppConfig(JsonConfig):
         self.db_test = DatabaseConfig()
         self.db_ci_test = DatabaseConfig()
         self.gunicorn = {}
+
+
+def load_config_file():
+    return aumbry.load(aumbry.FILE, AppConfig, {"CONFIG_FILE_PATH": "./config.json"})
