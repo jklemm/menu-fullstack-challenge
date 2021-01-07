@@ -1,15 +1,48 @@
 
+<script>
+  import { onMount } from "svelte";
+  let pedidos;
+
+  onMount(async () => {
+    await fetch(`http://localhost:8000/pedidos`)
+      .then(r => r.json())
+      .then(data => {
+        pedidos = data;
+      });
+  })
+</script>
+
 <svelte:head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Pedidos</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700"/>
 </svelte:head>
 
-<main role="main" class="col-md-9 ml-sm-auto col-lg-10 py-5 px-4">
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 py-5 px-2">
 
-  <div class="container">
+  <div class="container-fluid">
     <h1>Pedidos</h1>
+
+    <table width="50%">
+        <thead>
+            <th>ID</th>
+            <th>Data</th>
+            <th>Cliente ID</th>
+            <th>Valor</th>
+        </thead>
+        <tbody>
+        {#if pedidos}
+            {#each pedidos as pedido }
+                <tr>
+                    <td>{pedido.id}</td>
+                    <td>{pedido.data}</td>
+                    <td>{pedido.cliente_id}</td>
+                    <td>{pedido.valor}</td>
+                </tr>
+            {/each}
+        {:else}
+            <p class="loading">Carregando...</p>
+        {/if}
+        </tbody>
+    </table>
   </div>
 
 </main>

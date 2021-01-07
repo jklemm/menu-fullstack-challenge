@@ -1,6 +1,7 @@
 import os
 
 import falcon
+from falcon_cors import CORS
 
 from api.database.manager import DBManager
 from api.middleware.context import ContextMiddleware
@@ -10,7 +11,9 @@ from api.resources.pedidos_resource import PedidosResource
 
 class APIService(falcon.API):
     def __init__(self, cfg):
-        super(APIService, self).__init__(middleware=[ContextMiddleware()])
+        public_cors = CORS(allow_all_origins=True)
+
+        super(APIService, self).__init__(middleware=[ContextMiddleware(), public_cors.middleware])
 
         self.cfg = cfg
 
